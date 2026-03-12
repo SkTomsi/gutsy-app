@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && bunx --bun prisma generate",
+    "build": "bunx --bun prisma generate && next build",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
