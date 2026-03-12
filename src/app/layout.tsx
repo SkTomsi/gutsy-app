@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -27,9 +28,11 @@ export default function RootLayout({
         className={`${nunitoSans.variable} ${nunito.className} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <main className="min-h-screen max-w-sm mx-auto border-x">
-            {children}
-          </main>
+          <TooltipProvider>
+            <main className="min-h-screen max-w-2xl mx-auto border-x">
+              {children}
+            </main>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
