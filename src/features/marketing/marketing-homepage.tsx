@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import AccentButton from "@/components/custom/accent-button";
 import { Card } from "@/components/ui/card";
 import { FEATURE_CARDS } from "@/features/marketing/constants";
@@ -6,7 +7,7 @@ import { FEATURE_CARDS } from "@/features/marketing/constants";
 
 export default function MarketingHomepage() {
   return (
-    <div className="flex flex-col max-w-2xl mx-auto min-h-dvh justify-start w-full bg-emerald-50 gap-16 py-12 px-4">
+    <div className="flex flex-col max-w-2xl mx-auto min-h-dvh justify-start w-full gap-16 py-12 px-4">
       <div className="gap-4 items-center w-full flex flex-col ">
         <h1 className="text-4xl tracking-tight font-black text-primary text-center text-pretty">
           Your gut is trying to tell you something. 🦠
@@ -51,7 +52,11 @@ export default function MarketingHomepage() {
           </Link>
         </Button> */}
       </div>
-      <AccentButton className="h-16">START YOU GUT HEALTH JOURNEY</AccentButton>
+      <Link href={"/home"} className="w-full">
+        <AccentButton className="h-16 w-full">
+          START YOU GUT HEALTH JOURNEY
+        </AccentButton>
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Nunito, Nunito_Sans } from "next/font/google";
+import { Geist_Mono, Nunito, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { TRPCReactProvider } from "@/lib/trpc/client";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -10,6 +11,10 @@ const nunito = Nunito({
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -25,13 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${nunitoSans.variable} ${nunito.className} antialiased`}
+        className={`${nunitoSans.variable} ${nunito.className} ${geistMono.variable} antialiased bg-neutral-100`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <TooltipProvider>
-            <main className="min-h-screen max-w-2xl mx-auto border-x">
-              {children}
-            </main>
+            <TRPCReactProvider>
+              <main className="min-h-screen max-w-md mx-auto">{children}</main>
+            </TRPCReactProvider>
           </TooltipProvider>
         </ThemeProvider>
       </body>
