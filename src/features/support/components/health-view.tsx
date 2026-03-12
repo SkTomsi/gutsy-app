@@ -7,7 +7,7 @@ import { useTRPC } from "@/lib/trpc/client";
 export function HealthView() {
   const trpc = useTRPC();
 
-  const { data: backendHealth, isLoading } = useSuspenseQuery(
+  const { data: backendHealth, isLoading } = useQuery(
     trpc.getHealth.queryOptions(),
   );
 
@@ -62,13 +62,16 @@ export function HealthView() {
             </div>
           </CardHeader>
           <CardContent className="font-mono text-sm">
-            {isDbLoading && <div>Loading...</div>}
-            {dbHealth && (
+            {isDbLoading ? (
+              <div className="animate-pulse text-muted-foreground">
+                Checking Database...
+              </div>
+            ) : (
               <>
                 <div>
-                  Status : {dbHealth?.status === "ok" ? "OK ✅" : "error ❌"}
+                  Status: {dbHealth?.status === "ok" ? "OK ✅" : "error ❌"}
                 </div>
-                <div>Code : {dbHealth?.code}</div>
+                <div>Code: {dbHealth?.code}</div>
               </>
             )}
           </CardContent>

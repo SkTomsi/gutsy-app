@@ -9,8 +9,6 @@ export const appRouter = createTRPCRouter({
   getDbHealth: baseProcedure.query(async () => {
     const health = await db.dbHealth.findMany();
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
-
     if (health.length === 0) {
       return { status: "error", code: 500 };
     }
