@@ -1,5 +1,7 @@
+"use client";
+
 import { HealthView } from "@/features/support/components/health-view";
 
-export default async function Health() {
+export default function Health() {
   return <HealthView />;
 }
