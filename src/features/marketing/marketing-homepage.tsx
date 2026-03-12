@@ -6,9 +6,9 @@ import { FEATURE_CARDS } from "@/features/marketing/constants";
 
 export default function MarketingHomepage() {
   return (
-    <div className="flex flex-col max-w-2xl mx-auto min-h-dvh pb-20  justify-center w-full bg-emerald-50">
-      <div className="gap-4 items-center w-full flex flex-col p-12">
-        <h1 className="text-4xl tracking-tight font-black text-primary text-center">
+    <div className="flex flex-col max-w-2xl mx-auto min-h-dvh justify-start w-full bg-emerald-50 gap-16 py-12 px-4">
+      <div className="gap-4 items-center w-full flex flex-col ">
+        <h1 className="text-4xl tracking-tight font-black text-primary text-center text-pretty">
           Your gut is trying to tell you something. 🦠
         </h1>
         <p className="text-base text-center opacity-70 text-primary max-w-sm">
@@ -16,7 +16,7 @@ export default function MarketingHomepage() {
           doctor never had time to look for.
         </p>
       </div>
-      <div className="flex flex-col gap-2 w-full px-6">
+      <div className="flex flex-col gap-2 w-full">
         {FEATURE_CARDS.map((f) => (
           <Card
             key={f.title}
@@ -50,10 +50,8 @@ export default function MarketingHomepage() {
             GROW YOUR GARDEN
           </Link>
         </Button> */}
-        <AccentButton className="mt-12 h-14">
-          START YOU GUT HEALTH JOURNEY
-        </AccentButton>
       </div>
+      <AccentButton className="h-16">START YOU GUT HEALTH JOURNEY</AccentButton>
     </div>
   );
 }
