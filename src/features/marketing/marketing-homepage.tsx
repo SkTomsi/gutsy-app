@@ -3,6 +3,7 @@ import Link from "next/link";
 import AccentButton from "@/components/custom/accent-button";
 import { Card } from "@/components/ui/card";
 import { FEATURE_CARDS } from "@/features/marketing/constants";
+import { signIn } from "@/lib/auth-client";
 // import { signIn } from "@/lib/auth-client";
 
 export default function MarketingHomepage() {
@@ -37,26 +38,18 @@ export default function MarketingHomepage() {
           </Card>
         ))}
 
-        {/* <Button
-          className="mt-12 bg-emerald-50 text-emerald-700 shadow-neutral-200/30"
+        <AccentButton
+          className="h-16 w-full mt-12"
           onClick={() =>
             signIn.social({
               provider: "google",
-              callbackURL: "/dashboard",
+              callbackURL: "/home",
             })
           }
-          asChild
         >
-          <Link href={"/dashboard"} className="font-bold">
-            GROW YOUR GARDEN
-          </Link>
-        </Button> */}
-      </div>
-      <Link href={"/home"} className="w-full">
-        <AccentButton className="h-16 w-full">
           START YOU GUT HEALTH JOURNEY
         </AccentButton>
-      </Link>
+      </div>
     </div>
   );
 }
