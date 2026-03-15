@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
+import { sileo } from "sileo";
 import AccentButton from "@/components/custom/accent-button";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FEATURE_CARDS } from "@/features/marketing/constants";
-import { signIn } from "@/lib/auth-client";
 // import { signIn } from "@/lib/auth-client";
 
 export default function MarketingHomepage() {
@@ -38,17 +39,11 @@ export default function MarketingHomepage() {
           </Card>
         ))}
 
-        <AccentButton
-          className="h-16 w-full mt-12"
-          onClick={() =>
-            signIn.social({
-              provider: "google",
-              callbackURL: "/home",
-            })
-          }
-        >
-          START YOU GUT HEALTH JOURNEY
-        </AccentButton>
+        <Link href={"/login"}>
+          <AccentButton className="h-16 w-full mt-12">
+            START YOU GUT HEALTH JOURNEY
+          </AccentButton>
+        </Link>
       </div>
     </div>
   );
