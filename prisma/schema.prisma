@@ -19,6 +19,8 @@ model DbHealth {
 }
 
 model User {
+  //Better auth schema
+
   id            String    @id @default(nanoid())
   email         String    @unique
   name          String?
@@ -28,6 +30,10 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  // additional user fields
+
+  isOnboarded Boolean @default(false)
 
   @@map("user")
 }
@@ -79,3 +85,5 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+

@@ -1,10 +1,11 @@
+/** biome-ignore-all lint/a11y/noSvgWithoutTitle: <explanation> */
 import AccentButton from "@/components/custom/accent-button";
 import { signIn } from "@/lib/auth-client";
 
 export function LoginInGoogleButton() {
   return (
     <AccentButton
-      className="text-primary w-full"
+      className="text-primary w-full h-14"
       colors={{
         bg: "bg-white",
         border: "border-muted",

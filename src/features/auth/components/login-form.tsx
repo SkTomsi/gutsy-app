@@ -2,14 +2,11 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { LockIcon, MailIcon } from "lucide-react";
 import Image from "next/image";
 import { sileo } from "sileo";
 import { z } from "zod";
 import AccentButton from "@/components/custom/accent-button";
 import { BodyL, TitleL } from "@/components/typography/font";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { LoginInGoogleButton } from "./google-button";
 
 const LOGIN_FORM_SCHEMA = z.object({
@@ -39,8 +36,8 @@ export function LoginForm() {
   });
 
   return (
-    <div className="min-h-dvh flex flex-col w-full relative p-3">
-      <div className="flex flex-col gap-6 w-full h-fit bg-white rounded-2xl px-4 py-12">
+    <div className="min-h-dvh flex flex-col w-full relative p-3 items-center justify-center">
+      <div className="flex flex-col gap-6 w-full h-fit bg-white rounded-2xl px-4 py-12 justify-center">
         <div className="size-24 bg-muted rounded-xl p-2 flex flex-col items-center justify-center mx-auto">
           <Image
             src={"/assets/mascot/1.png"}
@@ -57,7 +54,7 @@ export function LoginForm() {
             listen.
           </BodyL>
         </div>
-        <div>
+        {/* <div>
           <form
             id="login-form"
             onSubmit={(e) => {
@@ -132,7 +129,7 @@ export function LoginForm() {
           <div className="border-b w-full" />
           <p className="text-muted-foreground text-sm">OR</p>
           <div className="border-b w-full" />
-        </div>
+        </div> */}
         <div className="w-full">
           <LoginInGoogleButton />
         </div>

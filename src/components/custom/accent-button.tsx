@@ -17,7 +17,7 @@ interface AccentButtonProps extends React.ComponentProps<typeof Button> {
   colors?: AccentButtonColors;
 }
 
-const DEFAULT_PATTERN: HapticSegment[] = [{ duration: 50, intensity: 0.2 }];
+const DEFAULT_PATTERN: HapticSegment[] = [{ duration: 50, intensity: 0.5 }];
 
 const DEFAULT_COLORS: AccentButtonColors = {
   bg: "bg-emerald-600",
@@ -46,10 +46,11 @@ export default function AccentButton({
   return (
     <Button
       className={cn(
-        "h-12 font-extrabold text-base rounded-xl border-2",
+        "h-12 font-extrabold text-base rounded-xl border-2 relative overflow-clip z-0",
         "active:translate-y-[4px] active:shadow-[0_0]",
         "transition-all duration-300 ease-out",
         "shadow-[0_4px_0_0_--tw-shadow-color]",
+        "before:bg-transparent hover:before:bg-white/15 before:inset-0 before:absolute before:w-full before:h-full before:bg-clip-border before:-z-10",
         colors.bg,
         colors.border,
         colors.shadow ?? colors.border,

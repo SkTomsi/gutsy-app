@@ -9,7 +9,7 @@ export function TitleL({ children, className }: Props) {
   return (
     <h1
       className={cn(
-        "font-extrabold font-nunito tracking-tighter text-[36px] leading-[40px]",
+        "font-extrabold  tracking-tighter text-[36px] leading-[40px]",
         className,
       )}
     >
