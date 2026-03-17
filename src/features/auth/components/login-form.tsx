@@ -36,8 +36,8 @@ export function LoginForm() {
   });
 
   return (
-    <div className="min-h-dvh flex flex-col w-full relative p-3 items-center justify-center">
-      <div className="flex flex-col gap-6 w-full h-fit bg-white rounded-2xl px-4 py-12 justify-center">
+    <div className="h-dvh flex flex-col w-full relative p-3 items-center justify-end">
+      <div className="flex flex-col gap-6 h-fit w-full  bg-white dark:bg-background rounded-2xl px-4 py-12 justify-center">
         <div className="size-24 bg-muted rounded-xl p-2 flex flex-col items-center justify-center mx-auto">
           <Image
             src={"/assets/mascot/1.png"}
@@ -48,7 +48,7 @@ export function LoginForm() {
         </div>
 
         <div className="space-y-2 text-center">
-          <TitleL>Log in to Gutsy</TitleL>
+          <TitleL>Gloop is here!</TitleL>
           <BodyL className="text-muted-foreground text-balance">
             Your gut is trying to tell you something. Gutsy helps you finally
             listen.

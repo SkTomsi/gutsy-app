@@ -5,14 +5,18 @@ import { signIn } from "@/lib/auth-client";
 export function LoginInGoogleButton() {
   return (
     <AccentButton
-      className="text-primary w-full h-14"
+      className=" w-full h-14 text-primary"
       colors={{
-        bg: "bg-white",
-        border: "border-muted",
-        shadow: "shadow-muted",
+        bg: "bg-white dark:bg-foreground/4",
+        border: "border-muted dark:border-foreground/5",
+        shadow: "shadow-muted dark:shadow-foreground/5",
       }}
       onClick={() => {
-        signIn.social({ provider: "google", callbackURL: "/home" });
+        signIn.social({
+          provider: "google",
+          callbackURL: "/home",
+          newUserCallbackURL: "/u/onboarding",
+        });
       }}
     >
       Login with

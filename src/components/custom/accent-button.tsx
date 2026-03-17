@@ -7,9 +7,9 @@ import { Button } from "../ui/button";
 type HapticSegment = { duration: number; intensity?: number; delay?: number };
 
 interface AccentButtonColors {
-  bg: string; // e.g. "bg-violet-600"
-  border: string; // e.g. "border-violet-700"
-  shadow?: string; // e.g. "shadow-violet-700" — defaults to border shade
+  bg: string;
+  border: string;
+  shadow?: string;
 }
 
 interface AccentButtonProps extends React.ComponentProps<typeof Button> {
@@ -20,9 +20,9 @@ interface AccentButtonProps extends React.ComponentProps<typeof Button> {
 const DEFAULT_PATTERN: HapticSegment[] = [{ duration: 50, intensity: 0.5 }];
 
 const DEFAULT_COLORS: AccentButtonColors = {
-  bg: "bg-emerald-600",
-  border: "border-emerald-700",
-  shadow: "shadow-emerald-700",
+  bg: "bg-emerald-600 dark:bg-emerald-700 ",
+  border: "border-emerald-700 dark:border-emerald-800",
+  shadow: "shadow-emerald-700 dark:shadow-emerald-800",
 };
 
 export default function AccentButton({
@@ -46,7 +46,7 @@ export default function AccentButton({
   return (
     <Button
       className={cn(
-        "h-12 font-extrabold text-base rounded-xl border-2 relative overflow-clip z-0",
+        "h-12 font-extrabold text-base rounded-xl border-2 relative overflow-clip z-0 ",
         "active:translate-y-[4px] active:shadow-[0_0]",
         "transition-all duration-300 ease-out",
         "shadow-[0_4px_0_0_--tw-shadow-color]",

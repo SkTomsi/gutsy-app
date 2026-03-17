@@ -1,5 +1,8 @@
 {
   "editor.wordWrap": "on",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["{([\\s\\S]*)}", ":\\s*['\"`]([^'\"`]*)['\"`]"]
+  ]
 }

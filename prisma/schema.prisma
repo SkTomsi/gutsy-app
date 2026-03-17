@@ -32,8 +32,9 @@ model User {
   accounts      Account[]
 
   // additional user fields
-
-  isOnboarded Boolean @default(false)
+  isOnboarded Boolean  @default(false)
+  symptoms    String[]
+  goals       String[]
 
   @@map("user")
 }
@@ -85,5 +86,3 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
-
-

@@ -2,7 +2,7 @@ export const FEATURE_CARDS = [
   {
     title: "Find Your Triggers",
     description:
-      "Log meals and symptoms. Our AI connects the dots and tells you exactly what's causing your worst days.",
+      "Log meals and symptoms. Our AI tells you exactly what's causing your worst days.",
     emoji: "🔍",
   },
   {
