@@ -33,7 +33,7 @@ export default function MarketingHomepage() {
 
         <Link href={"/login"} className="mt-12">
           <AccentButton className="h-16 w-full">
-            START YOU GUT HEALTH JOURNEY
+            START YOUR GUT HEALTH JOURNEY
           </AccentButton>
         </Link>
       </div>

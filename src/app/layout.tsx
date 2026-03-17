@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "sileo";
 import { ThemeProvider } from "@/components/providers/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { TRPCReactProvider } from "@/lib/trpc/client";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const nunito = Nunito({
   variable: "--font-nunito",

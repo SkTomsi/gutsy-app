@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, BellOff, CheckCircle2, CheckIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Bell, BellOff, CheckCircle2, CheckIcon, Circle } from "lucide-react";
 import Image from "next/image";
 import {
   Caption,
@@ -13,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import { useSession } from "@/lib/auth-client";
 import { CONDITIONS, GOALS } from "@/lib/user-attributes";
+import { useTRPC } from "@/trpc/client";
 
 // ── Introduction ─────────────────────────────────────────────────
 
@@ -194,7 +196,11 @@ export function CollectUserGoals({
                 </Caption>
               </div>
 
-              {isSelected && <CheckCircle2 />}
+              {isSelected ? (
+                <CheckCircle2 />
+              ) : (
+                <Circle className="opacity-20" />
+              )}
             </button>
           );
         })}
@@ -278,7 +284,11 @@ export function LoggingFrequency({
                 </Caption>
               </div>
 
-              {isSelected && <CheckCircle2 />}
+              {isSelected ? (
+                <CheckCircle2 />
+              ) : (
+                <Circle className="opacity-20" />
+              )}
             </button>
           );
         })}

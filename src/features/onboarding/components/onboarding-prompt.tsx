@@ -13,15 +13,16 @@ import {
 import { useSession } from "@/lib/auth-client";
 
 export function OnboardingPrompt() {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  const { data } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+  const { data, isPending } = useSession();
 
   useEffect(() => {
-    if (!data?.user?.isOnboarded) {
+    if (isPending) return;
+
+    if (!data?.user.isOnboarded) {
       setIsOpen(true);
     }
-  }, [data]);
+  }, [data?.user.isOnboarded, isPending]);
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -32,6 +33,8 @@ export function OnboardingPrompt() {
             You skipped the setup — no hard feelings. But without it, Gloop
             can't personalise anything for you. It takes 2 minutes.
           </HeadlineM>
+
+          <div>{JSON.stringify(data)}</div>
         </div>
         <DrawerFooter>
           <DrawerClose className="p-2" asChild>

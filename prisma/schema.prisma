@@ -33,8 +33,19 @@ model User {
 
   // additional user fields
   isOnboarded Boolean  @default(false)
-  symptoms    String[]
+  conditions  String[]
   goals       String[]
+
+  loggingFrequency     String? // "EVERY_MEAL" | "ONCE_TWICE" | "FEW_TIMES_WEEK" | "WHENEVER"
+  timezone             String  @default("UTC")
+  notificationsEnabled Boolean @default(false)
+
+  // Check-in times — three explicit fields instead of Json
+  checkInMorning   String @default("08:00")
+  checkInAfternoon String @default("13:00")
+  checkInEvening   String @default("20:00")
+
+  role String @default("user")
 
   @@map("user")
 }
