@@ -1,16 +1,20 @@
-// OnboardingView.tsx
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { sileo } from "sileo";
+import { defaultPatterns } from "web-haptics";
+
 import AccentButton from "@/components/custom/accent-button";
 import { ScreenWrapper } from "@/components/custom/screen-wrapper";
 import { Caption } from "@/components/typography/font";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth-client";
+import { useHaptics } from "@/lib/haptics";
 import { useTRPC } from "@/trpc/client";
+
 import { StepIndicator } from "../components/step-indicator";
 import {
   AllDone,
@@ -23,11 +27,9 @@ import {
   ReminderSetup,
 } from "../components/step-screens";
 
-// Steps that show the back button and step indicator
-// Steps 0 (intro) and 7 (all done) are excluded
-const STEPS_WITH_NAV = [1, 2, 3, 4, 5, 6];
-const TOTAL_STEPS = 8; // 0–7
-const LAST_CONTENT_STEP = 6; // notification permission — last before done screen
+/* -------------------------------------------------------------------------- */
+/*                                  Types                                     */
+/* -------------------------------------------------------------------------- */
 
 type CheckInTimes = {
   morning: string;
@@ -40,16 +42,32 @@ type OnboardingData = {
   goals: string[];
   loggingFrequency: string;
   checkInTimes: CheckInTimes;
-  notificationsEnabled: boolean;
 };
+
+type NotificationStatus = "idle" | "granted" | "denied";
+
+/* -------------------------------------------------------------------------- */
+/*                            Step Configuration                              */
+/* -------------------------------------------------------------------------- */
+
+const TOTAL_STEPS = 8;
+const LAST_CONTENT_STEP = 6;
+
+const NAV_STEPS = new Set([1, 2, 3, 4, 5, 6]);
+
+/* -------------------------------------------------------------------------- */
+/*                              Component                                     */
+/* -------------------------------------------------------------------------- */
 
 export function OnboardingView() {
   const router = useRouter();
+  const haptics = useHaptics();
+  const { refetch } = useSession();
+  const trpc = useTRPC();
 
   const [step, setStep] = useState(0);
-  const [notificationStatus, setNotificationStatus] = useState<
-    "idle" | "granted" | "denied"
-  >("idle");
+  const [notificationStatus, setNotificationStatus] =
+    useState<NotificationStatus>("idle");
 
   const [data, setData] = useState<OnboardingData>({
     conditions: [],
@@ -60,22 +78,27 @@ export function OnboardingView() {
       afternoon: "13:00",
       evening: "20:00",
     },
-    notificationsEnabled: false,
   });
 
-  const trpc = useTRPC();
-  const completeOnboardingMutation = useMutation(
+  /* ------------------------------------------------------------------------ */
+  /*                                Mutation                                  */
+  /* ------------------------------------------------------------------------ */
+
+  const completeOnboarding = useMutation(
     trpc.user.completeOnboarding.mutationOptions({
-      onSuccess: () => {
-        sileo.success({
-          title: "Onboarding complete 🎉",
-        });
+      onSuccess: async () => {
+        await refetch();
+        haptics.trigger(defaultPatterns.success);
+        sileo.success({ title: "Onboarding complete 🎉" });
       },
     }),
   );
 
-  // ── Validation per step ──────────────────────────────────────
-  function canContinue(): boolean {
+  /* ------------------------------------------------------------------------ */
+  /*                              Derived State                               */
+  /* ------------------------------------------------------------------------ */
+
+  const canContinue = useMemo(() => {
     switch (step) {
       case 2:
         return data.conditions.length > 0;
@@ -86,139 +109,177 @@ export function OnboardingView() {
       default:
         return true;
     }
-  }
+  }, [step, data]);
 
-  // ── Notification request ─────────────────────────────────────
-  async function requestNotifications() {
-    if (!("Notification" in window)) {
-      setNotificationStatus("denied");
-      return;
-    }
-    const permission = await Notification.requestPermission();
-    setNotificationStatus(permission === "granted" ? "granted" : "denied");
-  }
+  const ctaLabel = useMemo(() => {
+    if (completeOnboarding.isPending) return "Setting things up...";
+    if (step === TOTAL_STEPS - 1) return "Log my first meal →";
+    if (step === LAST_CONTENT_STEP) return "I'm ready →";
+    return "Continue";
+  }, [step, completeOnboarding.isPending]);
 
-  // ── Continue handler ─────────────────────────────────────────
-  function handleContinue() {
-    // From all-done screen — push to dashboard directly
+  /* ------------------------------------------------------------------------ */
+  /*                              Actions                                     */
+  /* ------------------------------------------------------------------------ */
+
+  const goNext = useCallback(() => {
+    setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
+  }, []);
+
+  const goBack = useCallback(() => {
+    setStep((s) => Math.max(s - 1, 0));
+  }, []);
+
+  const submitOnboarding = useCallback(() => {
+    completeOnboarding.mutate({
+      conditions: data.conditions,
+      goals: data.goals,
+      loggingFrequency: data.loggingFrequency,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      checkInTimes: data.checkInTimes,
+      notificationsEnabled: notificationStatus === "granted",
+    });
+  }, [data, notificationStatus, completeOnboarding]);
+
+  const handleContinue = useCallback(() => {
+    // Final screen → dashboard
     if (step === TOTAL_STEPS - 1) {
       router.push("/home");
       return;
     }
 
-    // From notification step — submit then advance
+    // Submit on notification step
     if (step === LAST_CONTENT_STEP) {
-      completeOnboardingMutation.mutate({
-        conditions: data.conditions,
-        goals: data.goals,
-        loggingFrequency: data.loggingFrequency,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        checkInTimes: data.checkInTimes,
-        notificationsEnabled: notificationStatus === "granted",
-      });
+      submitOnboarding();
+    }
 
-      setStep((s) => s + 1);
+    goNext();
+  }, [step, router, submitOnboarding, goNext]);
+
+  const requestNotifications = useCallback(async () => {
+    if (!("Notification" in window)) {
+      setNotificationStatus("denied");
       return;
     }
 
-    setStep((s) => s + 1);
-  }
+    const permission = await Notification.requestPermission();
+    setNotificationStatus(permission === "granted" ? "granted" : "denied");
+  }, []);
 
-  // ── CTA label ────────────────────────────────────────────────
-  function ctaLabel(): string {
-    if (completeOnboardingMutation.isPending) return "Setting things up...";
-    if (step === TOTAL_STEPS - 1) return "Log my first meal →";
-    if (step === LAST_CONTENT_STEP) return "I'm ready →";
-    return "Continue";
-  }
+  /* ------------------------------------------------------------------------ */
+  /*                              Render Step                                 */
+  /* ------------------------------------------------------------------------ */
 
-  // ── Hide CTA on notification step if still idle ──────────────
-  // User should tap "Allow notifications" button first,
-  // then the Continue CTA appears to move forward
+  const StepContent = useMemo(() => {
+    switch (step) {
+      case 0:
+        return <Introduction />;
 
-  return (
-    <ScreenWrapper className="justify-center min-h-dvh relative">
-      {/* ── Top bar — hidden on intro and all-done ── */}
-      {STEPS_WITH_NAV.includes(step) && (
-        <div className="flex-col flex w-full fixed top-0 left-0 right-0 p-4 bg-background max-w-md mx-auto z-10">
-          <Caption className="text-center mx-auto w-full">ONBOARDING</Caption>
-          <div className="w-full flex items-center gap-4 h-12">
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              className="[&_svg]:h-6 [&_svg]:w-6"
-              onClick={() => setStep((s) => s - 1)}
-              disabled={completeOnboardingMutation.isPending}
-            >
-              <ArrowLeft className="size-4" />
-            </Button>
-            {/* Pass total - 2 to exclude intro (0) and all-done (7) from dot count */}
-            <StepIndicator step={step - 1} total={TOTAL_STEPS - 2} />
-          </div>
-        </div>
-      )}
+      case 1:
+        return <AppDisclaimer />;
 
-      {/* ── Step content ── */}
-      <div
-        className={`flex flex-col items-center h-full w-full px-4 pb-28
-        ${STEPS_WITH_NAV.includes(step) ? "pt-24" : "pt-8"}`}
-      >
-        {step === 0 && <Introduction />}
-        {step === 1 && <AppDisclaimer />}
-        {step === 2 && (
+      case 2:
+        return (
           <CollectUserSymptoms
             selected={data.conditions}
             onChange={(conditions) => setData((d) => ({ ...d, conditions }))}
           />
-        )}
-        {step === 3 && (
+        );
+
+      case 3:
+        return (
           <CollectUserGoals
             selected={data.goals}
             onChange={(goals) => setData((d) => ({ ...d, goals }))}
           />
-        )}
-        {step === 4 && (
+        );
+
+      case 4:
+        return (
           <LoggingFrequency
             selected={data.loggingFrequency}
             onChange={(loggingFrequency) =>
               setData((d) => ({ ...d, loggingFrequency }))
             }
           />
-        )}
-        {step === 5 && (
+        );
+
+      case 5:
+        return (
           <ReminderSetup
             times={data.checkInTimes}
             onChange={(checkInTimes) =>
               setData((d) => ({ ...d, checkInTimes }))
             }
           />
-        )}
-        {step === 6 && (
+        );
+
+      case 6:
+        return (
           <NotificationPermission
             status={notificationStatus}
             onRequest={requestNotifications}
           />
-        )}
-        {step === 7 && <AllDone />}
+        );
+
+      case 7:
+        return <AllDone />;
+
+      default:
+        return null;
+    }
+  }, [step, data, notificationStatus, requestNotifications]);
+
+  /* ------------------------------------------------------------------------ */
+  /*                                 Render                                   */
+  /* ------------------------------------------------------------------------ */
+
+  return (
+    <ScreenWrapper className="justify-center min-h-dvh relative">
+      {/* Top Bar */}
+      {NAV_STEPS.has(step) && (
+        <div className="fixed top-0 w-full max-w-md mx-auto p-4 bg-background z-10">
+          <Caption className="text-center">ONBOARDING</Caption>
+
+          <div className="flex items-center gap-4 h-12">
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              onClick={goBack}
+              disabled={completeOnboarding.isPending}
+            >
+              <ArrowLeft className="size-4" />
+            </Button>
+
+            <StepIndicator step={step - 1} total={TOTAL_STEPS - 2} />
+          </div>
+        </div>
+      )}
+
+      {/* Content */}
+      <div
+        className={`flex flex-col items-center w-full px-4 pb-28
+        ${NAV_STEPS.has(step) ? "pt-24" : "pt-8"}`}
+      >
+        {StepContent}
       </div>
 
-      {/* ── Bottom CTA ── */}
-      <div className="fixed bottom-0 left-0 right-0 py-6 before:inset-0 before:absolute before:w-full before:h-full before:bg-background mx-auto max-w-md w-full before:mask-t-from-70%">
-        <div className="relative px-4 flex flex-col items-center gap-3">
+      {/* Bottom CTA */}
+      <div className="fixed bottom-0 w-full max-w-md mx-auto py-6 bg-background">
+        <div className="px-4 flex flex-col gap-3">
           <AccentButton
             className="w-full h-14"
             onClick={handleContinue}
-            disabled={!canContinue() || completeOnboardingMutation.isPending}
+            disabled={!canContinue || completeOnboarding.isPending}
           >
-            {ctaLabel()}
+            {ctaLabel}
           </AccentButton>
 
-          {/* Skip link — only on reminder and notification steps */}
           {step === 6 && notificationStatus === "idle" && (
             <button
               type="button"
               onClick={handleContinue}
-              className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+              className="text-sm text-muted-foreground underline"
             >
               Maybe later — I understand I might miss things
             </button>

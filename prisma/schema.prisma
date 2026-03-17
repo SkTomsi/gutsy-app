@@ -45,7 +45,7 @@ model User {
   checkInAfternoon String @default("13:00")
   checkInEvening   String @default("20:00")
 
-  role String @default("user")
+  role String @default("USER")
 
   @@map("user")
 }

@@ -2,16 +2,30 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
 import { cache } from "react";
 import superjson from "superjson";
+import db from "@/lib/prisma";
 import { auth } from "../lib/auth";
-import db from "../lib/prisma";
 
-export const createTRPCContext = cache(async () => {});
+export const createTRPCContext = cache(async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return {
+    db,
+    user: {
+      id: session?.user.id,
+    },
+  };
+});
 
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
 // For instance, the use of a t variable
 // is common in i18n libraries.
-const t = initTRPC.create({
+
+export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
+
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
 });
 
@@ -33,8 +47,9 @@ export const authProcedure = t.procedure.use(async ({ next }) => {
 
   return next({
     ctx: {
-      db,
-      userId: session?.user.id,
+      user: {
+        id: session?.user.id,
+      },
     },
   });
 });

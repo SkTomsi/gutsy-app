@@ -7,20 +7,5 @@ export const authClient = createAuthClient({
 });
 
 export const { signIn, signUp, useSession } = createAuthClient({
-  plugins: [
-    inferAdditionalFields({
-      user: {
-        isOnboarded: {
-          type: "boolean",
-          default: false,
-          required: true,
-        },
-        role: {
-          type: ["CONSUMER", "FOOD_COACH"],
-          default: "CONSUMER",
-          required: true,
-        },
-      },
-    }),
-  ],
+  plugins: [inferAdditionalFields<typeof auth>()],
 });

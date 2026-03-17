@@ -6,7 +6,7 @@ export default createTRPCRouter({
   getUser: authProcedure.query(async ({ ctx }) => {
     const user = await ctx.db.user.findFirst({
       where: {
-        id: ctx.userId,
+        id: ctx.user.id,
       },
     });
 
@@ -36,7 +36,7 @@ export default createTRPCRouter({
       try {
         const user = await ctx.db.user.update({
           where: {
-            id: ctx.userId,
+            id: ctx.user.id,
           },
           data: {
             isOnboarded: true,
