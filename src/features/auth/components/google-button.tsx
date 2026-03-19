@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/a11y/noSvgWithoutTitle: <explanation> */
 import AccentButton from "@/components/custom/accent-button";
 import { signIn } from "@/lib/auth-client";
+import logger from "@/lib/logger";
 
 export function LoginInGoogleButton() {
   return (
@@ -12,9 +13,10 @@ export function LoginInGoogleButton() {
         shadow: "shadow-muted dark:shadow-foreground/5",
       }}
       onClick={() => {
+        logger.info("Logging in with Google");
         signIn.social({
           provider: "google",
-          callbackURL: "/home",
+          callbackURL: "/u/home",
           newUserCallbackURL: "/u/onboarding",
         });
       }}

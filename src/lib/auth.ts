@@ -19,11 +19,13 @@ export const auth = betterAuth({
     additionalFields: {
       isOnboarded: {
         type: "boolean",
-        default: false,
+        defaultValue: false,
+        input: false,
       },
       role: {
         type: ["USER", "EXPERT"],
-        default: "USER",
+        defaultValue: "USER",
+        input: false,
       },
     },
   },

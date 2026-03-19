@@ -33,8 +33,8 @@ model User {
 
   // additional user fields
   isOnboarded Boolean  @default(false)
-  conditions  String[]
-  goals       String[]
+  conditions  String[] @default([])
+  goals       String[] @default([])
 
   loggingFrequency     String? // "EVERY_MEAL" | "ONCE_TWICE" | "FEW_TIMES_WEEK" | "WHENEVER"
   timezone             String  @default("UTC")

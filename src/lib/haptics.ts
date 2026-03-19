@@ -1,3 +1,5 @@
+"use client";
+
 import { WebHaptics } from "web-haptics";
 
 let hapticsInstance: WebHaptics | null = null;

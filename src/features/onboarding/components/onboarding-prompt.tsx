@@ -17,8 +17,6 @@ export function OnboardingPrompt() {
   const [isOpen, setIsOpen] = useState(false);
   const { data, isPending } = useSession();
 
-  console.log(data, "ONBOARDING PROMPT");
-
   useEffect(() => {
     if (isPending) return;
 

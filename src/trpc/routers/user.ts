@@ -17,6 +17,7 @@ export default createTRPCRouter({
     return user;
   }),
 
+  //TODO: Add stricter validation
   completeOnboarding: authProcedure
     .input(
       z.object({
