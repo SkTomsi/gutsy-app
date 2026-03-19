@@ -1,18 +1,18 @@
 "use client";
 
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTRPC } from "@/lib/trpc/client";
+import { useTRPC } from "@/trpc/client";
 
 export function HealthView() {
   const trpc = useTRPC();
 
   const { data: backendHealth, isLoading } = useQuery(
-    trpc.getHealth.queryOptions(),
+    trpc.health.getHealth.queryOptions(),
   );
 
   const { data: dbHealth, isLoading: isDbLoading } = useQuery(
-    trpc.getDbHealth.queryOptions(),
+    trpc.health.getDbHealth.queryOptions(),
   );
 
   return (

@@ -32,8 +32,20 @@ model User {
   accounts      Account[]
 
   // additional user fields
+  isOnboarded Boolean  @default(false)
+  conditions  String[] @default([])
+  goals       String[] @default([])
 
-  isOnboarded Boolean @default(false)
+  loggingFrequency     String? // "EVERY_MEAL" | "ONCE_TWICE" | "FEW_TIMES_WEEK" | "WHENEVER"
+  timezone             String  @default("UTC")
+  notificationsEnabled Boolean @default(false)
+
+  // Check-in times — three explicit fields instead of Json
+  checkInMorning   String @default("08:00")
+  checkInAfternoon String @default("13:00")
+  checkInEvening   String @default("20:00")
+
+  role String @default("USER")
 
   @@map("user")
 }
@@ -85,5 +97,3 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
-
-

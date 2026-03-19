@@ -1,18 +1,24 @@
 /** biome-ignore-all lint/a11y/noSvgWithoutTitle: <explanation> */
 import AccentButton from "@/components/custom/accent-button";
 import { signIn } from "@/lib/auth-client";
+import logger from "@/lib/logger";
 
 export function LoginInGoogleButton() {
   return (
     <AccentButton
-      className="text-primary w-full h-14"
+      className=" w-full h-14 text-primary"
       colors={{
-        bg: "bg-white",
-        border: "border-muted",
-        shadow: "shadow-muted",
+        bg: "bg-white dark:bg-foreground/4",
+        border: "border-muted dark:border-foreground/5",
+        shadow: "shadow-muted dark:shadow-foreground/5",
       }}
       onClick={() => {
-        signIn.social({ provider: "google", callbackURL: "/home" });
+        logger.info("Logging in with Google");
+        signIn.social({
+          provider: "google",
+          callbackURL: "/u/home",
+          newUserCallbackURL: "/u/onboarding",
+        });
       }}
     >
       Login with

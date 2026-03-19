@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "sileo";
 import { ThemeProvider } from "@/components/providers/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { TRPCReactProvider } from "@/lib/trpc/client";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -35,14 +35,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${nunitoSans.variable} ${nunito.variable} ${geistMono.variable} ${geist.variable} antialiased bg-neutral-100`}
+        className={`${nunitoSans.variable} ${nunito.variable} ${geistMono.variable} ${geist.variable} font-nunito-sans antialiased bg-background`}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <TRPCReactProvider>
-              <main className="min-h-screen max-w-md mx-auto font-nunito-sans">
-                {children}
-              </main>
+              <main className="min-h-screen max-w-md mx-auto ">{children}</main>
               <Toaster position="top-center" options={{ fill: "black" }} />
             </TRPCReactProvider>
           </TooltipProvider>

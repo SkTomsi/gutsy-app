@@ -48,7 +48,7 @@ export function HeadlineL({ children, className }: Props) {
   return (
     <h2
       className={cn(
-        "font-bold text-[16px] leading-[20px] tracking-tight",
+        "font-extrabold text-[16px] leading-[20px] tracking-tight text-muted-foreground/90",
         className,
       )}
     >
@@ -61,7 +61,7 @@ export function HeadlineM({ children, className }: Props) {
   return (
     <h2
       className={cn(
-        "font-semibold text-[16px] leading-[20px] tracking-tight",
+        "font-semibold text-[16px] leading-[20px] tracking-tight text-muted-foreground/90",
         className,
       )}
     >
@@ -74,7 +74,7 @@ export function HeadlineS({ children, className }: Props) {
   return (
     <h2
       className={cn(
-        "font-medium text-[16px] leading-[20px] tracking-normal",
+        "font-medium text-[16px] leading-[20px] tracking-normal text-muted-foreground/90",
         className,
       )}
     >
@@ -85,7 +85,12 @@ export function HeadlineS({ children, className }: Props) {
 
 export function Caption({ children, className }: Props) {
   return (
-    <span className={cn("font-medium text-[14px] leading-[16px]", className)}>
+    <span
+      className={cn(
+        "font-medium text-[14px] leading-[16px] text-primary/50",
+        className,
+      )}
+    >
       {children}
     </span>
   );
@@ -124,7 +129,7 @@ export function HeadlineCaps({ children, className }: Props) {
   return (
     <span
       className={cn(
-        "font-semibold text-[12px] leading-[16px] tracking-[0.4px] uppercase",
+        "font-semibold text-[12px] leading-[16px] tracking-wide uppercase",
         className,
       )}
     >
