@@ -6,7 +6,7 @@ import { caller } from "@/trpc/server";
 
 export default async function Home() {
   const user = await caller.user.getUser();
-  const session = auth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
 
