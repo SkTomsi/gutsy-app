@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "post-install": "bunx --bun prisma generate && bunx --bun prisma migrate deploy",
+    "postinstall": "bunx --bun prisma generate && bunx --bun prisma migrate deploy",
     "db:migrate": "bunx --bun prisma migrate dev",
     "db:seed": "bunx --bun prisma db seed",
     "db:reset": "bunx --bun prisma migrate reset --force",
