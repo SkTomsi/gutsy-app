@@ -5,7 +5,6 @@ import { useForm } from "@tanstack/react-form";
 import Image from "next/image";
 import { sileo } from "sileo";
 import { z } from "zod";
-import AccentButton from "@/components/custom/accent-button";
 import { BodyL, TitleL } from "@/components/typography/font";
 import { LoginInGoogleButton } from "./google-button";
 
@@ -38,7 +37,7 @@ export function LoginForm() {
   return (
     <div className="h-dvh flex flex-col w-full relative p-3 items-center justify-end">
       <div className="flex flex-col gap-6 h-fit w-full  bg-white dark:bg-background rounded-2xl px-4 py-12 justify-center">
-        <div className="size-24 bg-muted rounded-xl p-2 flex flex-col items-center justify-center mx-auto">
+        <div className="size-24  flex flex-col items-center justify-center mx-auto">
           <Image
             src={"/assets/mascot/1.png"}
             alt="mascot"

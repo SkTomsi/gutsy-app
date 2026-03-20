@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import { useSession } from "@/lib/auth-client";
 import { CONDITIONS, GOALS } from "@/lib/user-attributes";
-import { useTRPC } from "@/trpc/client";
 
 // ── Introduction ─────────────────────────────────────────────────
 
@@ -24,9 +23,9 @@ export function Introduction() {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-4">
         <Image
-          src="/assets/mascot/3.png"
+          src="/assets/mascot/1.png"
           alt="Intro"
           width={200}
           height={200}
@@ -466,7 +465,7 @@ export function AllDone() {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full py-6 gap-8 text-center">
       <Image
-        src="/assets/mascot/3.png"
+        src="/assets/mascot/1.png"
         alt="Gloop celebrating"
         width={180}
         height={180}
