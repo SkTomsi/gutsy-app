@@ -1,6 +1,6 @@
 import healthRouter from "@/trpc/routers/health";
 import userRouter from "@/trpc/routers/user";
-import { createTRPCRouter } from "../init";
+import { createTRPCRouter } from "../core";
 
 export const appRouter = createTRPCRouter({
   health: healthRouter,

@@ -1,5 +1,5 @@
 import db from "@/lib/prisma";
-import { createTRPCRouter, publicProcedure } from "../init";
+import { createTRPCRouter, publicProcedure } from "../core";
 
 export default createTRPCRouter({
   getHealth: publicProcedure.query(async () => {
